@@ -1,0 +1,179 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f0f0f;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #e8002d 0%, #1a1a1a 100%);
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 3px solid #e8002d;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.header p {
+  color: #aaa;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Nav */
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.nav button {
+  padding: 0.7rem 2rem;
+  border: 2px solid #333;
+  background: transparent;
+  color: #aaa;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav button:hover {
+  border-color: #e8002d;
+  color: #fff;
+}
+
+.nav button.active {
+  background: #e8002d;
+  border-color: #e8002d;
+  color: #fff;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Table commune */
+.table-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #e8002d;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1a1a1a;
+}
+
+thead {
+  background: #e8002d;
+}
+
+thead th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+tbody tr {
+  border-bottom: 1px solid #2a2a2a;
+  transition: background 0.15s;
+}
+
+tbody tr:hover {
+  background: #252525;
+}
+
+tbody td {
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  color: #ddd;
+}
+
+/* Loading / Error */
+.loading {
+  text-align: center;
+  padding: 4rem;
+  color: #aaa;
+  font-size: 1.1rem;
+}
+
+.error {
+  text-align: center;
+  padding: 4rem;
+  color: #e8002d;
+}
+
+/* Team color dot */
+.team-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Driver number badge */
+.driver-number {
+  background: #e8002d;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: #1a1a1a;
+  color: #555;
+  font-size: 0.8rem;
+  border-top: 1px solid #333;
+  letter-spacing: 1px;
+}
