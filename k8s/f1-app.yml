@@ -205,6 +205,7 @@ spec:
 # ============================================
 # INGRESS — Gateway unique
 # ============================================
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -236,6 +237,13 @@ spec:
                 name: team-stats-service
                 port:
                   number: 80
+          - path: /favorites
+            pathType: Prefix
+            backend:
+              service:
+                name: favorites-service
+                port:
+                  number: 80
           - path: /
             pathType: Prefix
             backend:
@@ -243,3 +251,131 @@ spec:
                 name: frontend-service
                 port:
                   number: 80
+---
+# ============================================
+# POSTGRESQL — PersistentVolumeClaim
+# ============================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+
+---
+# ============================================
+# POSTGRESQL — Deployment
+# ============================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres-container
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_DB
+              value: f1db
+            - name: POSTGRES_USER
+              value: f1user
+            - name: POSTGRES_PASSWORD
+              value: f1password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+
+---
+# ============================================
+# POSTGRESQL — Service
+# ============================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: postgres
+
+---
+# ============================================
+# FAVORITES SERVICE — Deployment
+# ============================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: favorites-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: favorites
+  template:
+    metadata:
+      labels:
+        app: favorites
+    spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 10.96.0.10
+          - 8.8.8.8
+        searches:
+          - default.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: favorites-container
+          image: aminedelim/favorites-service:1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3004
+          env:
+            - name: DB_HOST
+              value: postgres-service
+            - name: DB_NAME
+              value: f1db
+            - name: DB_USER
+              value: f1user
+            - name: DB_PASSWORD
+              value: f1password
+
+---
+# ============================================
+# FAVORITES SERVICE — Service
+# ============================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: favorites-service
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3004
+  selector:
+    app: favorites
