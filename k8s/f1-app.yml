@@ -27,3 +27,104 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3001
+---
+# ============================================
+# RACE STATS SERVICE — Deployment
+# ============================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: race-stats-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: race-stats
+  template:
+    metadata:
+      labels:
+        app: race-stats
+    spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+          - 1.1.1.1
+        searches:
+          - default.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: race-stats-container
+          image: aminedelim/race-stats-service:1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3002
+
+---
+# ============================================
+# RACE STATS SERVICE — Service
+# ============================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: race-stats-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3002
+  selector:
+    app: race-stats
+
+---
+# ============================================
+# TEAM STATS SERVICE — Deployment
+# ============================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: team-stats-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: team-stats
+  template:
+    metadata:
+      labels:
+        app: team-stats
+    spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+          - 1.1.1.1
+        searches:
+          - default.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: team-stats-container
+          image: aminedelim/team-stats-service:1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3003
+
+---
+# ============================================
+# TEAM STATS SERVICE — Service
+# ============================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: team-stats-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3003
+  selector:
+    app: team-stats
