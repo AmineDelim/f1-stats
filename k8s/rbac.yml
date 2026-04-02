@@ -1,0 +1,138 @@
+# ============================================
+# SERVICE ACCOUNT — driver-stats
+# ============================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: driver-stats-sa
+  namespace: default
+
+---
+# ============================================
+# SERVICE ACCOUNT — race-stats
+# ============================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: race-stats-sa
+  namespace: default
+
+---
+# ============================================
+# SERVICE ACCOUNT — team-stats
+# ============================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: team-stats-sa
+  namespace: default
+
+---
+# ============================================
+# SERVICE ACCOUNT — favorites
+# ============================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: favorites-sa
+  namespace: default
+
+---
+# ============================================
+# ROLE — lecture seule des pods et services
+# ============================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: f1-reader
+  namespace: default
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints"]
+    verbs: ["get", "list", "watch"]
+
+---
+# ============================================
+# ROLE — accès complet pour favorites (BDD)
+# ============================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: f1-writer
+  namespace: default
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints", "persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+---
+# ============================================
+# ROLEBINDING — driver-stats → f1-reader
+# ============================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: driver-stats-binding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: driver-stats-sa
+    namespace: default
+roleRef:
+  kind: Role
+  name: f1-reader
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# ============================================
+# ROLEBINDING — race-stats → f1-reader
+# ============================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: race-stats-binding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: race-stats-sa
+    namespace: default
+roleRef:
+  kind: Role
+  name: f1-reader
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# ============================================
+# ROLEBINDING — team-stats → f1-reader
+# ============================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: team-stats-binding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: team-stats-sa
+    namespace: default
+roleRef:
+  kind: Role
+  name: f1-reader
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# ============================================
+# ROLEBINDING — favorites → f1-writer
+# ============================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: favorites-binding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: favorites-sa
+    namespace: default
+roleRef:
+  kind: Role
+  name: f1-writer
+  apiGroup: rbac.authorization.k8s.io

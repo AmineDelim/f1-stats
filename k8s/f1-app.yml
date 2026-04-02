@@ -15,6 +15,7 @@ spec:
       labels:
         app: driver-stats
     spec:
+      serviceAccountName: driver-stats-sa
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
@@ -66,6 +67,7 @@ spec:
       labels:
         app: race-stats
     spec:
+      serviceAccountName: race-stats-sa
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
@@ -117,6 +119,7 @@ spec:
       labels:
         app: team-stats
     spec:
+      serviceAccountName: team-stats-sa
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
@@ -338,6 +341,7 @@ spec:
       labels:
         app: favorites
     spec:
+      serviceAccountName: favorites-sa
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
