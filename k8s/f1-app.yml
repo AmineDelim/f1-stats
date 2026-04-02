@@ -1,3 +1,7 @@
+---
+# ============================================
+# DRIVER STATS SERVICE — Deployment
+# ============================================
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,6 +31,24 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3001
+
+---
+# ============================================
+# DRIVER STATS SERVICE — Service (ClusterIP)
+# ============================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: driver-stats-service
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3001
+  selector:
+    app: driver-stats
+
 ---
 # ============================================
 # RACE STATS SERVICE — Deployment
@@ -63,14 +85,14 @@ spec:
 
 ---
 # ============================================
-# RACE STATS SERVICE — Service
+# RACE STATS SERVICE — Service (ClusterIP)
 # ============================================
 apiVersion: v1
 kind: Service
 metadata:
   name: race-stats-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: http
       port: 80
@@ -114,17 +136,53 @@ spec:
 
 ---
 # ============================================
-# TEAM STATS SERVICE — Service
+# TEAM STATS SERVICE — Service (ClusterIP)
 # ============================================
 apiVersion: v1
 kind: Service
 metadata:
   name: team-stats-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: http
       port: 80
       targetPort: 3003
   selector:
     app: team-stats
+
+---
+# ============================================
+# INGRESS — Gateway unique
+# ============================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: f1-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: f1.local
+      http:
+        paths:
+          - path: /drivers
+            pathType: Prefix
+            backend:
+              service:
+                name: driver-stats-service
+                port:
+                  number: 80
+          - path: /races
+            pathType: Prefix
+            backend:
+              service:
+                name: race-stats-service
+                port:
+                  number: 80
+          - path: /teams
+            pathType: Prefix
+            backend:
+              service:
+                name: team-stats-service
+                port:
+                  number: 80
