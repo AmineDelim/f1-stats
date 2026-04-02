@@ -8,6 +8,7 @@ export default defineConfig({
       '/drivers': 'http://f1.local',
       '/races': 'http://f1.local',
       '/teams': 'http://f1.local',
+      '/favorites': 'http://f1.local',
     }
   }
 })

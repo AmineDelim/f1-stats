@@ -177,3 +177,33 @@ tbody td {
   border-top: 1px solid #333;
   letter-spacing: 1px;
 }
+
+/* Bouton favori */
+.fav-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: transform 0.15s;
+}
+
+.fav-btn:hover {
+  transform: scale(1.3);
+}
+
+.fav-active {
+  filter: drop-shadow(0 0 4px gold);
+}
+
+/* Message vide */
+.empty {
+  text-align: center;
+  padding: 3rem;
+  color: #aaa;
+  font-size: 1rem;
+  border: 1px dashed #333;
+  border-radius: 8px;
+  margin-top: 1rem;
+}

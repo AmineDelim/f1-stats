@@ -2,6 +2,7 @@ import { useState } from 'react'
 import DriversTable from './components/DriversTable'
 import RacesTable from './components/RacesTable'
 import TeamsTable from './components/TeamsTable'
+import FavoritesTable from './components/FavoritesTable'
 import './App.css'
 
 function App() {
@@ -35,12 +36,19 @@ function App() {
         >
           🗓️ Races
         </button>
+        <button
+          className={activeTab === 'favorites' ? 'active' : ''}
+          onClick={() => setActiveTab('favorites')}
+        >
+          ⭐ Favorites
+        </button>
       </nav>
 
       <main className="main">
         {activeTab === 'drivers' && <DriversTable />}
         {activeTab === 'teams' && <TeamsTable />}
         {activeTab === 'races' && <RacesTable />}
+        {activeTab === 'favorites' && <FavoritesTable />}
       </main>
 
       <footer className="footer">
