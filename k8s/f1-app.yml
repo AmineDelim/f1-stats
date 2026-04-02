@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: driver-stats-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: driver-stats
+  template:
+    metadata:
+      labels:
+        app: driver-stats
+    spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+          - 1.1.1.1
+        searches:
+          - default.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: driver-stats-container
+          image: aminedelim/driver-stats-service:1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001

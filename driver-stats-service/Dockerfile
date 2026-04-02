@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+# Ajouter les certificats SSL
+RUN apk add --no-cache ca-certificates
+
 WORKDIR /app
 
 COPY package.json .
